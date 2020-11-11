@@ -25,6 +25,8 @@ alp_numbers = alphabet + numbers
 len_alphabet = len(alphabet)
 len_alp_Numb = len(alp_numbers)
 
+
+# generating of the simple expressions
 for row in dict_template_formulas:
     for i in range(len_alphabet):
         data['variable'] = alphabet[i]
@@ -34,6 +36,28 @@ for row in dict_template_formulas:
         data['expression'] = row['template_expression'].format(alphabet[i], alp_numbers[n])
         data['result']     = row['template_result'].format(alphabet[i], alp_numbers[n])
         dict_writer.writerow(data)
+
+
+# generating of the difficult expressions
+for row in csv.DictReader(open('template_formulas.txt', newline='')):
+    for i in range(len_alphabet):
+        data['variable'] = alphabet[i]
+        n = random.randint(0, len_alp_Numb - 1)
+        n = n - 1 if n == i else n
+
+        inner_expression = row['template_expression'].format(alphabet[i], alp_numbers[n])
+        inner_result     = row['template_result'].format(alphabet[i], alp_numbers[n])
+
+        for rowOuter in csv.DictReader(open('template_formulas.txt', newline='')):
+            m = random.randint(0, len_alp_Numb - 1)
+            m = m - 1 if m == i else m
+
+            difficult_variable = " ( {0} ) ".format(inner_expression)
+            data['expression'] = rowOuter['template_expression'].format(difficult_variable, alp_numbers[m])
+            data['result'] = "( {0} )".format(inner_result) + rowOuter['template_result'].format(difficult_variable, alp_numbers[m])
+
+            dict_writer.writerow(data)
+
 
 del dict_writer
 
