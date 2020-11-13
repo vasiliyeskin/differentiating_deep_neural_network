@@ -8,15 +8,15 @@ import utils.utils as utils
 
 fields = ['variable', 'expression', 'result']
 
-with open('alphabet.txt', 'r') as file:
+with open('dataset/alphabet.txt', 'r') as file:
     alphabet = [line.strip() for line in file.readlines()]
 
-with open('numbers.txt', 'r') as file:
+with open('dataset/numbers.txt', 'r') as file:
     numbers = [line.strip() for line in file.readlines()]
 
-dict_template_formulas = csv.DictReader(open('template_formulas.txt', newline=''))
+dict_template_formulas = csv.DictReader(open('dataset/template_formulas.txt', newline=''))
 
-dict_writer = csv.DictWriter(open("differentiating_expressions.txt",'w'), fieldnames=fields)
+dict_writer = csv.DictWriter(open("dataset/differentiating_expressions.csv",'w'), fieldnames=fields)
 dict_writer.writeheader()
 
 data = {}
@@ -39,7 +39,7 @@ for row in dict_template_formulas:
 
 
 # generating of the difficult expressions
-for row in csv.DictReader(open('template_formulas.txt', newline='')):
+for row in csv.DictReader(open('dataset/template_formulas.txt', newline='')):
     for i in range(len_alphabet):
         data['variable'] = alphabet[i]
         n = random.randint(0, len_alp_Numb - 1)
@@ -48,7 +48,7 @@ for row in csv.DictReader(open('template_formulas.txt', newline='')):
         inner_expression = row['template_expression'].format(alphabet[i], alp_numbers[n])
         inner_result     = row['template_result'].format(alphabet[i], alp_numbers[n])
 
-        for rowOuter in csv.DictReader(open('template_formulas.txt', newline='')):
+        for rowOuter in csv.DictReader(open('dataset/template_formulas.txt', newline='')):
             m = random.randint(0, len_alp_Numb - 1)
             m = m - 1 if m == i else m
 
@@ -64,6 +64,6 @@ del dict_writer
 ### latex to pdf to png for visualization of the result
 print(data['expression'])
 line = 'test_rendering/test_rendering.png',\
-       "\\frac {{ \partial }} {{ \partial {0} }} {1}  = {2}".format(data['variable'], data['expression'],data['result']), 'test.png', True
+       "\\frac {{ \partial }} {{ \partial {0} }} {1}  = {2}".format(data['variable'], data['expression'],data['result']), 'test_rendering/test.png', True
 utils.latex2png(line)
 
