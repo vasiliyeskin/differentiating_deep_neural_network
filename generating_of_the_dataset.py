@@ -54,7 +54,7 @@ for row in csv.DictReader(open('dataset/template_formulas.txt', newline='')):
 
             difficult_variable = " ( {0} ) ".format(inner_expression)
             data['expression'] = rowOuter['template_expression'].format(difficult_variable, alp_numbers[m])
-            data['result'] = "( {0} )".format(inner_result) + rowOuter['template_result'].format(difficult_variable, alp_numbers[m])
+            data['result'] = "( {0} ) ( {1} )".format(inner_result, rowOuter['template_result'].format(difficult_variable, alp_numbers[m]))
 
             dict_writer.writerow(data)
 
